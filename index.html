@@ -2,43 +2,67 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VR-контроллер с температурной обратной связью</title>
 
   <style>
+    /* ================= ПЕРЕМЕННЫЕ ================= */
     :root {
       --accent-color: #38bdf8;
       --block-bg: #020617;
       --content-bg: #0f172a;
       --text-color: #e5e7eb;
+
       --background-pc: url("resources/background.png");
       --background-phone: url("resources/background2.png");
     }
 
-    body {
+    /* ================= СБРОС ================= */
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
       margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background-color: #000;
+      padding: 0;
+    }
+
+    /* ================= ФИКСИРОВАННЫЙ ФОН ================= */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-color: #020617;
       background-image: var(--background-pc);
       background-size: cover;
       background-position: center;
-      color: var(--text-color);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background-repeat: no-repeat;
     }
 
+    /* ================= BODY ================= */
+    body {
+      min-height: 100dvh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text-color);
+      overflow-x: hidden;
+    }
+
+    /* ================= КОНТЕЙНЕР ================= */
     .container {
       position: relative;
-      width: 1400px;
-      height: 900px;
+      width: min(1400px, 100%);
+      margin: 0 auto;
+      padding: 80px 0;
+      min-height: 100dvh;
     }
 
+    /* ================= АНИМАЦИЯ ================= */
     @keyframes float {
       0%, 100% { transform: translate(-50%, -50%) translateY(0); }
       50% { transform: translate(-50%, -50%) translateY(-10px); }
     }
 
+    /* ================= ЛИНИИ ================= */
     .line {
       position: absolute;
       top: 50%;
@@ -49,6 +73,7 @@
       z-index: 1;
     }
 
+    /* ================= БЛОКИ ================= */
     .block {
       position: absolute;
       width: 280px;
@@ -58,7 +83,7 @@
       padding: 16px 18px;
       z-index: 4;
       cursor: pointer;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      transition: box-shadow 0.3s ease;
     }
 
     .block:hover {
@@ -85,6 +110,7 @@
       display: block;
     }
 
+    /* ================= ДЖОЙСТИК ================= */
     .joystick {
       position: absolute;
       top: 50%;
@@ -95,102 +121,109 @@
     }
 
     .joystick img {
-      width: 400px;
+      width: min(400px, 80vw);
       height: auto;
       display: block;
     }
 
-    /* ================= АДАПТИВ ================= */
-    @media (max-width: 1079px) {
-      body {
-        margin: 0;
-        font-family: "Segoe UI", Arial, sans-serif;
-        background-repeat: no-repeat;
-        background-color: #000;
+    /* ================= МОБИЛЬНАЯ АДАПТАЦИЯ ================= */
+    @media (max-width: 900px) {
+
+      .bg {
+        position: fixed;
+        inset: -50px; /* ВАЖНО */
+        z-index: -1;
+
         background-image: var(--background-phone);
         background-size: cover;
         background-position: center;
-        color: var(--text-color);
-        height: auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        background-repeat: no-repeat;
       }
+
       .container {
-        width: 100%;
-        height: 620px;
-        padding: 30px 0;
-      }
-      .joystick {
         position: relative;
-        top:  250px;
-        left: 85%;
-        margin: auto auto;
-        z-index: 3;
-        animation: float 6s ease-in-out infinite;
+        width: min(1400px, 100%);
+        margin: 0 auto;
+        padding-top: 40px;
       }
-      .joystick img {
-        width: 300px;
-        height: auto;
-        
-      }
+
+      .joystick {
+    position: relative;   /* не static */
+    transform: none;
+    margin: 24px auto 32px;
+    display: block;
+    z-index: 10;          /* выше фонового слоя */
+    text-align: center;   /* если нужно */
+  }
+
+  .joystick img {
+    width: 70vw;
+    max-width: 300px;
+    height: auto;
+    display: inline-block;
+  }
+
       .block {
         position: static;
         width: 90%;
-        margin: 10px auto;
+        margin: 12px auto;
       }
+
       .line {
         display: none;
       }
     }
-
   </style>
 </head>
+
 <body>
+
+<!-- ФИКСИРОВАННЫЙ ФОН -->
+<div class="bg"></div>
 
 <div class="container">
 
   <!-- ЦЕНТР -->
   <div class="joystick">
-    <img src="resources/joystick.png " alt="Joystick">
+    <img src="resources/joystick.png" alt="Joystick">
   </div>
 
   <!-- ПРАВО -->
   <div class="line" style="width: 500px; transform: rotate(-35deg);"></div>
   <div class="block" style="top: 4%; left: 78%;" onclick="toggle(this)">
     <h3>Термоэлемент Пельтье</h3>
-    <div class="content">Термоэлектрический модуль Пельтье является ключевым элементом температурной обратной связи. Он способен как нагревать, так и охлаждать поверхность контроллера в зависимости от направления подаваемого электрического тока. Это позволяет пользователю ощущать тепло горячих объектов или холод металлических и ледяных поверхностей в виртуальной среде.</div>
+    <div class="content">Термоэлектрический модуль Пельтье обеспечивает нагрев и охлаждение поверхности контроллера.</div>
   </div>
 
   <div class="line" style="width: 520px; transform: rotate(0deg);"></div>
   <div class="block" style="top: 42%; left: 82%;" onclick="toggle(this)">
     <h3>Датчики температуры</h3>
-    <div class="content">Датчики температуры непрерывно измеряют температуру корпуса в зоне контакта с рукой пользователя. Эти данные используются системой управления для автоматического ограничения нагрева или охлаждения, что гарантирует безопасность и комфорт при работе.</div>
+    <div class="content">Датчики измеряют температуру корпуса для обеспечения безопасности.</div>
   </div>
 
   <div class="line" style="width: 500px; transform: rotate(35deg);"></div>
   <div class="block" style="top: 78%; left: 78%;" onclick="toggle(this)">
     <h3>Микроконтроллер</h3>
-    <div class="content">Микроконтроллер является центральным элементом управления. Он получает команды из виртуальной среды, анализирует данные датчиков и управляет работой термоэлемента, обеспечивая точное и плавное изменение температуры.</div>
+    <div class="content">Микроконтроллер управляет всеми процессами устройства.</div>
   </div>
 
   <!-- ЛЕВО -->
   <div class="line" style="width: 500px; transform: rotate(215deg);"></div>
   <div class="block" style="top: 4%; left: -2%;" onclick="toggle(this)">
     <h3>Теплопроводящий корпус</h3>
-    <div class="content">Корпус выполнен из теплопроводящих материалов, которые равномерно распределяют тепло и холод по поверхности контроллера. Это предотвращает локальные перегревы и делает ощущения более естественными.</div>
+    <div class="content">Корпус равномерно распределяет тепло и холод.</div>
   </div>
 
   <div class="line" style="width: 520px; transform: rotate(180deg);"></div>
   <div class="block" style="top: 42%; left: -6%;" onclick="toggle(this)">
     <h3>Система теплоотвода</h3>
-    <div class="content">Система теплоотвода удаляет избыточное тепло с горячей стороны термоэлемента Пельтье. Это обеспечивает стабильную работу устройства и предотвращает перегрев внутренних компонентов.</div>
+    <div class="content">Система удаляет избыточное тепло.</div>
   </div>
 
   <div class="line" style="width: 500px; transform: rotate(145deg);"></div>
   <div class="block" style="top: 78%; left: -2%;" onclick="toggle(this)">
     <h3>Аккумулятор</h3>
-    <div class="content">Аккумулятор обеспечивает автономное питание всех электронных компонентов контроллера. Он оптимизирован для работы с энергоёмкими температурными импульсами и поддерживает стабильную работу системы.</div>
+    <div class="content">Аккумулятор обеспечивает автономную работу.</div>
   </div>
 
 </div>
