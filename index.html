@@ -115,7 +115,7 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-0%, -50%);
       z-index: 3;
       animation: float 6s ease-in-out infinite;
     }
@@ -126,34 +126,31 @@
       display: block;
     }
 
-    /* ================= МОБИЛЬНАЯ АДАПТАЦИЯ ================= */
     @media (max-width: 900px) {
 
-      .bg {
-        position: fixed;
-        inset: -50px; /* ВАЖНО */
-        z-index: -1;
+  .bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--background-phone);
+    background-size: auto auto auto auto;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 
-        background-image: var(--background-phone);
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-      }
+  .container {
+    position: relative;
+    width: min(1400px, 100%);
+    margin: auto auto;
+    max-height: 100dvh;
+  }
 
-      .container {
-        position: relative;
-        width: min(1400px, 100%);
-        margin: 0 auto;
-        padding-top: 40px;
-      }
-
-      .joystick {
-    position: relative;   /* не static */
+  .joystick {
+    position: relative;
     transform: none;
-    margin: 24px auto 32px;
+    margin: 250px auto -200px; /* чуть опускаем джойстик под верх */
     display: block;
-    z-index: 10;          /* выше фонового слоя */
-    text-align: center;   /* если нужно */
+    text-align: center;
   }
 
   .joystick img {
@@ -163,16 +160,17 @@
     display: inline-block;
   }
 
-      .block {
-        position: static;
-        width: 90%;
-        margin: 12px auto;
-      }
+  .block {
+    position: static;
+    width: 90%;
+    margin: 12px auto;
+  }
 
-      .line {
-        display: none;
-      }
-    }
+  .line {
+    display: none;
+  }
+}
+
   </style>
 </head>
 
